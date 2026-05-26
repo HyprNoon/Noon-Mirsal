@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Mirsal",
-  "version": "1.2.9",
+  "version": "1.3.0",
   "description": "مرسال — universal browser to shell bridge",
   "homepage_url": "https://github.com/noon-shell/mirsal",
   "browser_specific_settings": {
