@@ -6,5 +6,4 @@ const CONFIG_DEFAULTS = {
   "shade.mediaBrightness": 85,
   "palette.enabled": true,
   "palette.pollInterval": 5,
-  "downloads.enabled": true,
 };

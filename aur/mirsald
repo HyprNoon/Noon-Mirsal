@@ -11,11 +11,17 @@ import protocol
 
 PALETTE_PATH = os.path.join(
     os.environ.get("XDG_CACHE_HOME", os.path.expanduser("~/.cache")),
-    "noon", "user", "generated", "colors", "firefox.json",
+    "noon",
+    "user",
+    "generated",
+    "colors",
+    "firefox.json",
 )
 RELOAD_FLAG = os.path.join(
     os.environ.get("XDG_CACHE_HOME", os.path.expanduser("~/.cache")),
-    "noon", "mirsal", "reload.flag",
+    "noon",
+    "mirsal",
+    "reload.flag",
 )
 
 if len(sys.argv) > 1 and sys.argv[1] in {"pull-palette", "reload", "--help"}:
@@ -48,19 +54,6 @@ if len(sys.argv) > 1 and sys.argv[1] in {"pull-palette", "reload", "--help"}:
         sys.exit(0)
 
 
-def _xdg_download_dir():
-    try:
-        with open(os.path.expanduser("~/.config/user-dirs.dirs")) as f:
-            for line in f:
-                line = line.strip()
-                if line.startswith("XDG_DOWNLOAD_DIR="):
-                    val = line.split("=", 1)[1].strip().strip('"').strip("'")
-                    return val.replace("$HOME", os.path.expanduser("~"))
-    except OSError:
-        pass
-    return os.path.expanduser("~/Downloads")
-
-
 def consume_reload_flag():
     try:
         os.remove(RELOAD_FLAG)
@@ -76,12 +69,14 @@ def push_palette(reload=False):
         with open(PALETTE_PATH) as f:
             palette = json.load(f)
         mtime = os.path.getmtime(PALETTE_PATH)
-        protocol.write({
-            "type": "palette_colors",
-            "payload": palette,
-            "mtime": mtime,
-            "reload": reload,
-        })
+        protocol.write(
+            {
+                "type": "palette_colors",
+                "payload": palette,
+                "mtime": mtime,
+                "reload": reload,
+            }
+        )
     except Exception as e:
         protocol.write({"type": "palette_colors", "error": str(e)})
 
@@ -94,42 +89,10 @@ def ipc_call(method, payload):
     return result.returncode == 0, result.stderr.decode().strip()
 
 
-def feed_download(msg_type, data):
-    ipc_call("feedDownloadInfo", json.dumps({"type": msg_type, "data": data}))
-
-
 def handle_message(msg):
     t = msg.get("type", "")
 
-    if t == "downloads.add":
-        raw = msg.get("payload", "{}")
-        try:
-            p = json.loads(raw) if isinstance(raw, str) else raw
-        except json.JSONDecodeError as e:
-            protocol.write({"status": "error", "error": f"invalid payload json: {e}"})
-            return
-        filename = p.get("filename", "").split("/")[-1] or p.get("url", "").split("/")[-1] or "download"
-        p["destination"] = os.path.join(_xdg_download_dir(), filename)
-        feed_download("downloads.add", p)
-        protocol.write({"status": "ok"})
-
-    elif t == "downloads.changed":
-        raw = msg.get("payload", "{}")
-        try:
-            p = json.loads(raw) if isinstance(raw, str) else raw
-        except json.JSONDecodeError:
-            return
-        feed_download("downloads.changed", p)
-
-    elif t == "downloads.erased":
-        raw = msg.get("payload", "{}")
-        try:
-            p = json.loads(raw) if isinstance(raw, str) else raw
-        except json.JSONDecodeError:
-            return
-        feed_download("downloads.erased", p)
-
-    elif t == "bookmarks.sync":
+    if t == "bookmarks.sync":
         bookmarks = msg.get("payload", [])
         ok, err = ipc_call("feedBookmarks", json.dumps(json.dumps(bookmarks)))
         if not ok:

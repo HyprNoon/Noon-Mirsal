@@ -9,11 +9,11 @@ Mirsal intercepts some of browser's protocols to the integrated tools inside "No
 
 # Repurpose for your own use case 
 - Have a look on the aur/mirsald and repurpose their call back functions on each action and their payload
-- and for the method names each inside their function eg, bookmarks.sync , downloads.add , ..etc those are the called messages inside the mirsald
+- and for the method names each inside their function eg, bookmarks.sync , ~downloads.add~ , ..etc those are the called messages inside the mirsald
 
 ## Current Capabilities
 - [X] Bookmarks Syncing
-- [X] Downloads interception
+- [X] ~Downloads interception~
 - [X] Fast Color Sync - Omit pywalfox
 - [X] Page colors override - Omit DarkReader
 - [X] Minimal New tab page

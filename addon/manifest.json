@@ -19,15 +19,12 @@
     "128": "assets/icons/128.png"
   },
   "permissions": [
-    "downloads",
     "nativeMessaging",
     "theme",
     "storage",
     "bookmarks",
     "tabs",
     "cookies",
-    "webRequest",
-    "webRequestBlocking",
     "<all_urls>"
   ],
   "browser_action": {
@@ -47,7 +44,6 @@
       "common/config_options.js",
       "common/css_colors.js",
       "functions/bookmarks/bookmarks.js",
-      "functions/downloads/downloads.js",
       "functions/shade/shade.js",
       "functions/palette/palette.js",
       "main.js"

@@ -14,7 +14,6 @@ const ELEMENTS = {
     suffix: "s",
     display: "palette-poll-interval-value",
   },
-  "downloads.enabled": { id: "downloads-enabled", type: "checkbox" },
 };
 
 function showStatus(msg) {
